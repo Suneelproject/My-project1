@@ -1,0 +1,96 @@
+package project;
+
+import java.util.Scanner;
+
+public class mainclass {
+
+	public static int add(int number1, int number2) {
+		return number1 + number2;
+	}
+
+	public static int sub(int number1, int number2) {
+		return (number1 - number2);
+
+	}
+
+	public static int mul(int number1, int number2) {
+		return number1 * number2;
+	}
+
+	public static double div(double number1, double number2) {
+		if (number2 == 0) {
+			throw new IllegalArgumentException("Number can not be divide by 0!");
+		}
+
+		return number1 / number2;
+	}
+	
+	public static void main(String[] args) {
+
+		try (Scanner sc = new Scanner(System.in)) {
+			System.out.println("Enter First Number : ");
+			int input = sc.nextInt();
+			
+
+			Scanner sc1 = new Scanner(System.in);
+			System.out.println("Enter Second Number : ");
+			int input1 = sc1.nextInt();
+			
+			System.out.println("The Addition is : " + mainclass.add(input, input1));
+			System.out.println("The Substraction is : " + mainclass.sub(input, input1));
+			System.out.println("The Multiplication is : " + mainclass.mul(input, input1));
+			System.out.println("The Division is : " + mainclass.div(input, input1));
+		}
+		
+		
+	}
+
+Junit test
+
+package project;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class suneel {
+
+	@Test
+	public void calTest() {
+		assertEquals(30, mainclass.add(10, 20));
+	}
+
+	@Test
+	public void calTestSub() {
+		assertEquals(30, mainclass.sub(50, 20));
+	}
+
+	@Test
+	public void calcTestMul() {
+		assertEquals(30, mainclass.mul(6, 5));
+	}
+
+	@Test
+	public void calcTestDiv() {
+		assertEquals(6, mainclass.div(30, 5));
+	}
+
+}
+
+simple Project
+
+package suneel.example;
+
+public class sample {
+
+	public static void main(String[] args) {
+      int First = 4;
+      int Second = 6;
+      
+      // add two numbers
+      int sum = First + Second;
+      System.out.println(First + " + " + Second + " = " + sum);
+
+	}
+
+}
