@@ -1,0 +1,44 @@
+    1  apt update
+    2  curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.24.9/2023-01-11/bin/linux/amd64/kubectl
+    3  chmod +x ./kubectl
+    4  sudo mv ./kubectl /usr/local/bin/kubectl
+    5  sudo apt update && sudo apt install docker.io -y
+    6  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin
+    7  sudo apt install conntrack -y
+    8  git clone https://github.com/Mirantis/cri-dockerd.git
+    9  wget https://storage.googleapis.com/golang/getgo/installer_linux
+   10  chmod +x ./installer_linux
+   11  ./installer_linux
+   12  source ~/.bash_profile
+   13  cd cri-dockerd
+   14  mkdir bin
+   15  go get && go build -o bin/cri-dockerd
+   16  mkdir -p /usr/local/bin
+   17  install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd
+   18  cp -a packaging/systemd/* /etc/systemd/system
+   19  sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+   20  systemctl daemon-reload
+   21  systemctl enable cri-docker.service
+   22  systemctl enable --now cri-docker.socket
+   23  VERSION="v1.24.1" # check latest version in /releases page
+   24  curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-${VERSION}-linux-amd64.tar.gz --output crictl-${VERSION}-linux-amd64.tar.gz
+   25  sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+   26  rm -f crictl-$VERSION-linux-amd64.tar.gz
+   27  sudo cp /usr/local/bin/cri-dockerd /usr/bin/
+   28  minikube start --vm-driver=none
+   29  minikube status
+   30  kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+   31  minikube stop 
+   32  minikube start
+   33  kubectl get nodes
+   34  curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/canal.yaml -O
+   35  kubectl apply -f canal.yaml
+   36  kubectl get nods 
+
+
+
+kubectl create deploy springboot --image=suneelraj/spring:1 
+expose deploy springboot --port=8080 --type=NodePort
+kubectl set image deployment springboot springboot-demo=suneelraj/spring:2 --record=true
+kubectl rollout history deploy/springboot
+kubectl rollout undo deployment springboot
